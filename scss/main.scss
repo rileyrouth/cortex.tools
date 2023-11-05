@@ -1,0 +1,354 @@
+@import "reset";
+@font-face {
+    font-family: "Cortex";
+    src: url("Cortex.TTF");
+}
+
+$clr-accent: hsl(0, 90%, 60%);
+$clr-body-500: hsl(0, 0%, 80%);
+$clr-background-400: hsl(0, 0%, 30%);
+$clr-background-600: hsl(0, 0%, 20%);
+$clr-background-800: hsl(0, 0%, 10%);
+
+body {
+    background-color: $clr-background-800;
+    color:$clr-body-500;
+    font-family:"Roboto", sans-serif;
+}
+
+nav {
+    background-color: $clr-background-600;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding:1rem 2rem;
+    position:relative;
+    i {
+        font-size:2rem;
+    }
+}
+
+.sidebar {
+    background-color: $clr-background-400;
+}
+
+main {
+    padding:2rem;
+    display:flex;
+    flex-wrap:wrap;
+    gap:3rem;
+    .starter {
+        border:.25rem dashed $clr-background-600;
+        border-radius:2rem;
+        padding:4rem 5rem;
+        margin:auto;
+        cursor:default;
+        user-select: none;
+        text-align:center;
+        h2 {
+            font-size:1.75rem;
+            font-weight:700;
+        }
+        i {
+            font-size:2rem;
+            position:relative;
+            top:.3rem;
+            margin-inline:.3rem;
+        }
+    }
+}
+
+i.button {
+    cursor:pointer;
+    &:hover {
+        color:$clr-accent;
+    }
+}
+
+.trait-set {
+    background-color: $clr-background-600;
+    width:20rem;
+    height:fit-content;
+    border-radius:.5rem;
+    padding:1rem;
+    &-header {
+        display:flex;
+        gap:1rem;
+        justify-content: space-between;
+        border-bottom:1px solid $clr-background-800;
+        margin-bottom:1rem;
+        line-height:1.1;
+        h2 {
+            text-transform:uppercase;
+            font-weight:700;
+            font-size:2rem;
+        }
+        .button-container {
+            display:flex;
+            gap:.5rem;
+            .fa-gears {
+                display:none;
+            }
+            i {
+                font-size:1rem;            
+            }
+        }
+    }
+    .traits {
+        font-size:1.2rem;
+        li {
+            display:flex;
+            justify-content: space-between;
+            gap:1rem;
+            align-items:center;
+            font-variant-caps:small-caps;
+            .close-button {
+                display:none;
+            }
+            p {
+                flex-grow:1;
+                border-bottom:1px solid $clr-background-600;
+                margin-bottom: -1px;
+                color:$clr-body-500;
+                transition:
+                    border-width .1s;
+            }
+            p:focus-visible,
+            &:has(.close-button:hover) p {
+                outline:none;
+                border-color:$clr-accent;
+                border-width:3px;
+            }
+            i {
+                cursor:default;
+            }
+        }
+    }
+}
+
+.trait-set:has([contenteditable="true"]) {
+    background-color:$clr-background-800;
+    border:2px solid $clr-background-600;
+    padding:calc(1rem - 2px);
+    .trait-set-header {
+        border-color: $clr-body-500;
+        .fa-gears {
+            display:block;
+        }
+    }
+    .traits {
+        background-color:$clr-background-800;
+        li {
+            position:relative;
+        }
+        .close-button {
+            content:'X';
+            display:block;
+            position:absolute;
+            left:-2rem;
+            font-size:.9rem;
+            background-color:$clr-background-600;
+            color:$clr-background-800;
+            padding-inline:.25rem;
+            border-top-left-radius:50%;
+            border-bottom-left-radius:50%;
+            &:hover {
+                cursor:pointer;
+                color:$clr-accent;
+            }
+        }
+        i {
+            position: relative;
+            cursor:pointer;
+        }
+    }
+    .new-trait-button {
+        display:block;
+    }
+}
+
+.grid {
+    width:25rem;
+    .traits {
+        display:grid;
+        grid-template-columns: auto auto;
+        column-gap:3rem;
+        li:nth-child(even) .close-button {
+            border-top-left-radius:0;
+            border-bottom-left-radius:0;
+            border-top-right-radius:50%;
+            border-bottom-right-radius:50%;
+            left:auto;
+            right:-2rem;
+        }
+    }
+}
+
+.cortex {
+    font-family:"Cortex";
+    font-size:2rem;
+    color:$clr-accent;
+}
+
+.tmp-element {
+    border:0;
+    padding-left:2em;
+    white-space: pre;
+    font-variant-caps:small-caps;
+    font-size:19.2px;
+}
+
+.die-selector {
+    position:absolute;
+    display:flex;
+    gap:.75rem;
+    top:0;
+    padding-inline:.5rem;
+    background-color:$clr-background-400;
+    animation: fade .5s ease;
+    z-index:1;
+    i:hover {
+        color:$clr-body-500;
+        cursor:pointer;
+    }
+}
+
+@keyframes fade {
+    0%, 40% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+
+.start-d4 {
+    left:-.5rem;
+}
+
+.start-d6 {
+    left:-3.25rem;
+}
+
+.start-d8 {
+    left:-6rem;
+}
+
+.start-d10 {
+    left:-8.75rem;
+}
+
+.start-d12 {
+    left:-11.5rem;
+}
+
+#traitSetMenu {
+    position:absolute;
+    right:2rem;
+    top:4rem;
+    background-color:$clr-background-600;
+    li {
+        padding:.5rem 1rem;
+        border-top:1px solid $clr-background-800;
+        &:hover {
+            background-color:$clr-background-400;
+            cursor:pointer;
+        }
+    }
+}
+
+.new-trait-button {
+    display:none;
+    width:100%;
+    background-color:$clr-background-800;
+    color:$clr-body-500;
+    text-align:center;
+    border:none;
+    &:hover {
+        background-color:$clr-background-600;
+        cursor:pointer;
+    }
+}
+
+.options-panel {
+    position:absolute;
+    display:flex;
+    flex-direction:column;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+    width:700px;
+    height:75vh;
+    background-color:$clr-background-600;
+    border-radius:.5rem;
+    padding:2rem;
+    h2 {
+        text-transform:uppercase;
+        font-weight:700;
+        font-size:2rem;
+        border-bottom:1px solid $clr-body-500;
+        margin-bottom:2rem;
+    }
+    .options {
+        flex-grow: 1;
+        display:grid;
+        gap: 1rem;
+        grid-template-columns: auto 1fr;
+        grid-template-rows:2rem;
+    }
+    .die-selector {
+        position:static;
+        width:min-content;
+        background:none;
+        animation: none;
+        padding:0;
+        align-self:start;
+        line-height:1;
+        cursor:pointer;
+        .current {
+            color:$clr-body-500;
+        }
+    }
+    input {
+        background:$clr-background-800;
+        border:none;
+        outline-color:red;
+        outline:none;
+    }
+    &-footer {
+        border-top:1px solid $clr-body-500;
+        margin-top:2rem;
+        padding-top:.5rem;
+        display:flex;
+        justify-content: space-between;
+    }
+    button {
+        border:none;
+        padding:.5rem;
+        border-radius:.2rem;
+        display:flex;
+        gap:.5rem;
+        line-height:1;
+        cursor:pointer;
+    }
+    .delete-button {
+        background-color:$clr-accent;
+        color: $clr-background-800;
+    }
+    .save-button {
+        background-color:$clr-body-500;
+        color: $clr-background-800;
+    }
+}
+
+.darkened-background {
+    content:'';
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color:$clr-background-800;
+    opacity:.9;
+}

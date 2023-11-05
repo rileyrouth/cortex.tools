@@ -1,0 +1,83 @@
+{
+    "name": "Skills",
+    "options": {
+        "prime": true,
+        "defaultRating": 4
+    },
+    "traits": [{
+        "name": "Craft",
+        "rating": 4 
+    },
+    {
+        "name": "Drive",
+        "rating": 4 
+    },
+    {
+        "name": "Fight",
+        "rating": 4 
+    },
+    {
+        "name": "Fix",
+        "rating": 4 
+    },
+    {
+        "name": "Fly",
+        "rating": 4
+    },
+    {
+        "name": "Focus",
+        "rating": 4 
+    },
+    {
+        "name": "Influence",
+        "rating": 4 
+    },
+    {
+        "name": "Know",
+        "rating": 4 
+    },
+    {
+        "name": "Labor",
+        "rating": 4 
+    },
+    {
+        "name": "Move",
+        "rating": 4 
+    },
+    {
+        "name": "Notice",
+        "rating": 4
+    },
+    {
+        "name": "Operate",
+        "rating": 4 
+    },
+    {
+        "name": "Perform",
+        "rating": 4 
+    },
+    {
+        "name": "Shoot",
+        "rating": 4 
+    },
+    {
+        "name": "Sneak",
+        "rating": 4 
+    },
+    {
+        "name": "Survive",
+        "rating": 4 
+    },
+    {
+        "name": "Throw",
+        "rating": 4 
+    },
+    {
+        "name": "Trick",
+        "rating": 4 
+    },
+    {
+        "name": "Treat",
+        "rating": 4 
+    }]
+}

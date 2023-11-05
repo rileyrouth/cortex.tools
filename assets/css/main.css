@@ -1,0 +1,416 @@
+/* A Modern CSS Reset, by Andy Bell */
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role=list],
+ol[role=list] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  -webkit-text-decoration-skip: ink;
+          text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+@font-face {
+  font-family: "Cortex";
+  src: url("Cortex.TTF");
+}
+body {
+  background-color: hsl(0, 0%, 10%);
+  color: hsl(0, 0%, 80%);
+  font-family: "Roboto", sans-serif;
+}
+
+nav {
+  background-color: hsl(0, 0%, 20%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  position: relative;
+}
+nav i {
+  font-size: 2rem;
+}
+
+.sidebar {
+  background-color: hsl(0, 0%, 30%);
+}
+
+main {
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+main .starter {
+  border: 0.25rem dashed hsl(0, 0%, 20%);
+  border-radius: 2rem;
+  padding: 4rem 5rem;
+  margin: auto;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  text-align: center;
+}
+main .starter h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+main .starter i {
+  font-size: 2rem;
+  position: relative;
+  top: 0.3rem;
+  margin-inline: 0.3rem;
+}
+
+i.button {
+  cursor: pointer;
+}
+i.button:hover {
+  color: hsl(0, 90%, 60%);
+}
+
+.trait-set {
+  background-color: hsl(0, 0%, 20%);
+  width: 20rem;
+  height: -moz-fit-content;
+  height: fit-content;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+.trait-set-header {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  border-bottom: 1px solid hsl(0, 0%, 10%);
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+.trait-set-header h2 {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 2rem;
+}
+.trait-set-header .button-container {
+  display: flex;
+  gap: 0.5rem;
+}
+.trait-set-header .button-container .fa-gears {
+  display: none;
+}
+.trait-set-header .button-container i {
+  font-size: 1rem;
+}
+.trait-set .traits {
+  font-size: 1.2rem;
+}
+.trait-set .traits li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  font-variant-caps: small-caps;
+}
+.trait-set .traits li .close-button {
+  display: none;
+}
+.trait-set .traits li p {
+  flex-grow: 1;
+  border-bottom: 1px solid hsl(0, 0%, 20%);
+  margin-bottom: -1px;
+  color: hsl(0, 0%, 80%);
+  transition: border-width 0.1s;
+}
+.trait-set .traits li p:focus-visible, .trait-set .traits li:has(.close-button:hover) p {
+  outline: none;
+  border-color: hsl(0, 90%, 60%);
+  border-width: 3px;
+}
+.trait-set .traits li i {
+  cursor: default;
+}
+
+.trait-set:has([contenteditable=true]) {
+  background-color: hsl(0, 0%, 10%);
+  border: 2px solid hsl(0, 0%, 20%);
+  padding: calc(1rem - 2px);
+}
+.trait-set:has([contenteditable=true]) .trait-set-header {
+  border-color: hsl(0, 0%, 80%);
+}
+.trait-set:has([contenteditable=true]) .trait-set-header .fa-gears {
+  display: block;
+}
+.trait-set:has([contenteditable=true]) .traits {
+  background-color: hsl(0, 0%, 10%);
+}
+.trait-set:has([contenteditable=true]) .traits li {
+  position: relative;
+}
+.trait-set:has([contenteditable=true]) .traits .close-button {
+  content: "X";
+  display: block;
+  position: absolute;
+  left: -2rem;
+  font-size: 0.9rem;
+  background-color: hsl(0, 0%, 20%);
+  color: hsl(0, 0%, 10%);
+  padding-inline: 0.25rem;
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+.trait-set:has([contenteditable=true]) .traits .close-button:hover {
+  cursor: pointer;
+  color: hsl(0, 90%, 60%);
+}
+.trait-set:has([contenteditable=true]) .traits i {
+  position: relative;
+  cursor: pointer;
+}
+.trait-set:has([contenteditable=true]) .new-trait-button {
+  display: block;
+}
+
+.grid {
+  width: 25rem;
+}
+.grid .traits {
+  display: grid;
+  grid-template-columns: auto auto;
+  -moz-column-gap: 3rem;
+       column-gap: 3rem;
+}
+.grid .traits li:nth-child(even) .close-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  left: auto;
+  right: -2rem;
+}
+
+.cortex {
+  font-family: "Cortex";
+  font-size: 2rem;
+  color: hsl(0, 90%, 60%);
+}
+
+.tmp-element {
+  border: 0;
+  padding-left: 2em;
+  white-space: pre;
+  font-variant-caps: small-caps;
+  font-size: 19.2px;
+}
+
+.die-selector {
+  position: absolute;
+  display: flex;
+  gap: 0.75rem;
+  top: 0;
+  padding-inline: 0.5rem;
+  background-color: hsl(0, 0%, 30%);
+  animation: fade 0.5s ease;
+  z-index: 1;
+}
+.die-selector i:hover {
+  color: hsl(0, 0%, 80%);
+  cursor: pointer;
+}
+
+@keyframes fade {
+  0%, 40% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.start-d4 {
+  left: -0.5rem;
+}
+
+.start-d6 {
+  left: -3.25rem;
+}
+
+.start-d8 {
+  left: -6rem;
+}
+
+.start-d10 {
+  left: -8.75rem;
+}
+
+.start-d12 {
+  left: -11.5rem;
+}
+
+#traitSetMenu {
+  position: absolute;
+  right: 2rem;
+  top: 4rem;
+  background-color: hsl(0, 0%, 20%);
+}
+#traitSetMenu li {
+  padding: 0.5rem 1rem;
+  border-top: 1px solid hsl(0, 0%, 10%);
+}
+#traitSetMenu li:hover {
+  background-color: hsl(0, 0%, 30%);
+  cursor: pointer;
+}
+
+.new-trait-button {
+  display: none;
+  width: 100%;
+  background-color: hsl(0, 0%, 10%);
+  color: hsl(0, 0%, 80%);
+  text-align: center;
+  border: none;
+}
+.new-trait-button:hover {
+  background-color: hsl(0, 0%, 20%);
+  cursor: pointer;
+}
+
+.options-panel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px;
+  height: 75vh;
+  background-color: hsl(0, 0%, 20%);
+  border-radius: 0.5rem;
+  padding: 2rem;
+}
+.options-panel h2 {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 2rem;
+  border-bottom: 1px solid hsl(0, 0%, 80%);
+  margin-bottom: 2rem;
+}
+.options-panel .options {
+  flex-grow: 1;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 2rem;
+}
+.options-panel .die-selector {
+  position: static;
+  width: -moz-min-content;
+  width: min-content;
+  background: none;
+  animation: none;
+  padding: 0;
+  align-self: start;
+  line-height: 1;
+  cursor: pointer;
+}
+.options-panel .die-selector .current {
+  color: hsl(0, 0%, 80%);
+}
+.options-panel input {
+  background: hsl(0, 0%, 10%);
+  border: none;
+  outline-color: red;
+  outline: none;
+}
+.options-panel-footer {
+  border-top: 1px solid hsl(0, 0%, 80%);
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+.options-panel button {
+  border: none;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  display: flex;
+  gap: 0.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.options-panel .delete-button {
+  background-color: hsl(0, 90%, 60%);
+  color: hsl(0, 0%, 10%);
+}
+.options-panel .save-button {
+  background-color: hsl(0, 0%, 80%);
+  color: hsl(0, 0%, 10%);
+}
+
+.darkened-background {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: hsl(0, 0%, 10%);
+  opacity: 0.9;
+}

@@ -1,0 +1,31 @@
+{
+    "name": "Attributes",
+    "options": {
+        "prime": true,
+        "defaultRating": 8
+    },
+    "traits": [{
+        "name": "Strength",
+        "rating": 8
+    },
+    {
+        "name": "Dexterity",
+        "rating": 8
+    },
+    {
+        "name": "Constitution",
+        "rating": 8
+    },
+    {
+        "name": "Intelligence",
+        "rating": 10
+    },
+    {
+        "name": "Wisdom",
+        "rating": 6
+    },
+    {
+        "name": "Charisma",
+        "rating": 8
+    }]
+}
