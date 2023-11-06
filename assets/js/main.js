@@ -24,18 +24,31 @@ for (i = 0; i < traitSetList.length; i++) {
     traitSetMenu.appendChild(listItem);
 }
 
-const character = loadFromJSON("character");
+const character = {
+    "name": "",
+    "traitSets": []
+}
 
 addTraitSet.addEventListener("click", function(event) {
     nav.appendChild(traitSetMenu);
 })
 
-document.addEventListener("mousedown", function(e) {
+document.addEventListener("mousedown", async function(e) {
     if (e.target.matches("#traitSetMenu li")) {
         if (main.contains(starterBox)) {
             starterBox.remove();
         }
-        main.appendChild(createNewTraitSet(loadFromJSON(e.target.innerHTML)));
+        const targetName = e.target.innerHTML.toLowerCase();
+        const myRequest = new Request(`assets/js/bin/${targetName}.json`);
+        fetch(myRequest).then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((response) => {
+            main.appendChild(createNewTraitSet(response));
+        });
     }
     if (e.target.id != "addTraitSet") {
         traitSetMenu.remove();
@@ -170,13 +183,6 @@ function generateTrait(trait) {
     listItem.appendChild(closeButton);
 
     return listItem;
-}
-
-function loadFromJSON(filename) {
-    const request = new XMLHttpRequest();
-    request.open("GET", `assets/js/bin/${filename}.json`, false);
-    request.send(null)
-    return JSON.parse(request.responseText);
 }
 
 function editTraitSet(traitArticle) {
