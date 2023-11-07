@@ -2,7 +2,8 @@
     "name": "Skills",
     "options": {
         "prime": true,
-        "defaultRating": 4
+        "defaultRating": 4,
+        "display": "static"
     },
     "traits": [{
         "name": "Craft",

@@ -129,7 +129,7 @@ i.button:hover {
 
 .trait-set {
   background-color: hsl(0, 0%, 20%);
-  width: 20rem;
+  min-width: 20rem;
   height: -moz-fit-content;
   height: fit-content;
   border-radius: 0.5rem;
@@ -186,6 +186,32 @@ i.button:hover {
 .trait-set .traits li i {
   cursor: default;
 }
+.trait-set .traits li .die-scale {
+  display: flex;
+  gap: 0.25rem;
+  cursor: pointer;
+}
+.trait-set .traits li .die-scale .current {
+  color: hsl(0, 0%, 80%);
+}
+
+.trait-set:has(:nth-child(7)) {
+  width: 25rem;
+}
+.trait-set:has(:nth-child(7)) .traits {
+  display: grid;
+  grid-template-columns: auto auto;
+  -moz-column-gap: 3rem;
+       column-gap: 3rem;
+}
+.trait-set:has(:nth-child(7)) .traits li:nth-child(even) .close-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  left: auto;
+  right: -2rem;
+}
 
 .trait-set:has([contenteditable=true]) {
   background-color: hsl(0, 0%, 10%);
@@ -228,24 +254,6 @@ i.button:hover {
   display: block;
 }
 
-.grid {
-  width: 25rem;
-}
-.grid .traits {
-  display: grid;
-  grid-template-columns: auto auto;
-  -moz-column-gap: 3rem;
-       column-gap: 3rem;
-}
-.grid .traits li:nth-child(even) .close-button {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 50%;
-  border-bottom-right-radius: 50%;
-  left: auto;
-  right: -2rem;
-}
-
 .cortex {
   font-family: "Cortex";
   font-size: 2rem;
@@ -286,19 +294,15 @@ i.button:hover {
 .start-d4 {
   left: -0.5rem;
 }
-
 .start-d6 {
   left: -3.25rem;
 }
-
 .start-d8 {
   left: -6rem;
 }
-
 .start-d10 {
   left: -8.75rem;
 }
-
 .start-d12 {
   left: -11.5rem;
 }
@@ -339,25 +343,46 @@ i.button:hover {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  width: 700px;
-  height: 75vh;
+  max-width: 700px;
   background-color: hsl(0, 0%, 20%);
   border-radius: 0.5rem;
   padding: 2rem;
 }
-.options-panel h2 {
+.options-panel div:has(h2) {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid hsl(0, 0%, 80%);
+  align-items: center;
+  transition: border-width 0.1s;
+}
+.options-panel div:has(h2) h2 {
   text-transform: uppercase;
   font-weight: 700;
   font-size: 2rem;
-  border-bottom: 1px solid hsl(0, 0%, 80%);
-  margin-bottom: 2rem;
+}
+.options-panel div:has(h2):has([contenteditable=true]) {
+  border-color: hsl(0, 90%, 60%);
+  border-width: 3px;
+}
+.options-panel div:has(h2):has([contenteditable=true]) h2 {
+  border: none;
+  outline: none;
+}
+.options-panel div:has(h2):has([contenteditable=true]) h2::-moz-selection {
+  background-color: hsl(0, 90%, 60%);
+  color: hsl(0, 0%, 10%);
+}
+.options-panel div:has(h2):has([contenteditable=true]) h2::selection {
+  background-color: hsl(0, 90%, 60%);
+  color: hsl(0, 0%, 10%);
 }
 .options-panel .options {
-  flex-grow: 1;
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
   grid-template-columns: auto 1fr;
-  grid-template-rows: 2rem;
+  border-left: 1px solid hsl(0, 0%, 80%);
+  border-right: 1px solid hsl(0, 0%, 80%);
+  padding: 2rem 1rem;
 }
 .options-panel .die-selector {
   position: static;
@@ -376,12 +401,12 @@ i.button:hover {
 .options-panel input {
   background: hsl(0, 0%, 10%);
   border: none;
-  outline-color: red;
   outline: none;
 }
 .options-panel-footer {
+  flex-grow: 1;
+  align-items: end;
   border-top: 1px solid hsl(0, 0%, 80%);
-  margin-top: 2rem;
   padding-top: 0.5rem;
   display: flex;
   justify-content: space-between;
@@ -394,6 +419,19 @@ i.button:hover {
   gap: 0.5rem;
   line-height: 1;
   cursor: pointer;
+}
+.options-panel div:has(> label > [type=radio]) {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.options-panel div:has(> label > [type=radio]) label {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+}
+.options-panel div:has(> label > [type=radio]) label:hover {
+  background-color: hsl(0, 0%, 30%);
 }
 .options-panel .delete-button {
   background-color: hsl(0, 90%, 60%);

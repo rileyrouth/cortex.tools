@@ -2,7 +2,8 @@
     "name": "Distinctions",
     "options": {
         "prime": true,
-        "defaultRating": 8
+        "defaultRating": 8,
+        "display": "static"
     },
     "traits": [{
         "name": "Distinction 1",

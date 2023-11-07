@@ -1,8 +1,9 @@
 {
     "name": "Attributes",
     "options": {
-        "prime": true,
-        "defaultRating": 8
+        "prime": false,
+        "defaultRating": 8,
+        "display": "static"
     },
     "traits": [{
         "name": "Strength",

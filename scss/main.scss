@@ -67,7 +67,7 @@ i.button {
 
 .trait-set {
     background-color: $clr-background-600;
-    width:20rem;
+    min-width:20rem;
     height:fit-content;
     border-radius:.5rem;
     padding:1rem;
@@ -112,6 +112,7 @@ i.button {
                 color:$clr-body-500;
                 transition:
                     border-width .1s;
+            
             }
             p:focus-visible,
             &:has(.close-button:hover) p {
@@ -122,6 +123,31 @@ i.button {
             i {
                 cursor:default;
             }
+            .die-scale {
+                display:flex;
+                gap:.25rem;
+                cursor:pointer;
+                .current {
+                    color:$clr-body-500;
+                }
+            }
+        }
+    }
+}
+
+.trait-set:has(:nth-child(7)) {
+    width:25rem;
+    .traits {
+        display:grid;
+        grid-template-columns: auto auto;
+        column-gap:3rem;
+        li:nth-child(even) .close-button {
+            border-top-left-radius:0;
+            border-bottom-left-radius:0;
+            border-top-right-radius:50%;
+            border-bottom-right-radius:50%;
+            left:auto;
+            right:-2rem;
         }
     }
 }
@@ -167,23 +193,6 @@ i.button {
     }
 }
 
-.grid {
-    width:25rem;
-    .traits {
-        display:grid;
-        grid-template-columns: auto auto;
-        column-gap:3rem;
-        li:nth-child(even) .close-button {
-            border-top-left-radius:0;
-            border-bottom-left-radius:0;
-            border-top-right-radius:50%;
-            border-bottom-right-radius:50%;
-            left:auto;
-            right:-2rem;
-        }
-    }
-}
-
 .cortex {
     font-family:"Cortex";
     font-size:2rem;
@@ -214,7 +223,8 @@ i.button {
 }
 
 @keyframes fade {
-    0%, 40% {
+    0%,
+    40% {
         opacity:0;
     }
     100% {
@@ -222,24 +232,22 @@ i.button {
     }
 }
 
-.start-d4 {
-    left:-.5rem;
-}
-
-.start-d6 {
-    left:-3.25rem;
-}
-
-.start-d8 {
-    left:-6rem;
-}
-
-.start-d10 {
-    left:-8.75rem;
-}
-
-.start-d12 {
-    left:-11.5rem;
+.start {
+    &-d4 {
+        left:-.5rem;
+    }
+    &-d6 {
+        left:-3.25rem;
+    }
+    &-d8 {
+        left:-6rem;
+    }
+    &-d10 {
+        left:-8.75rem;
+    }
+    &-d12 {
+        left:-11.5rem;
+    }
 }
 
 #traitSetMenu {
@@ -278,24 +286,42 @@ i.button {
     right: 0; 
     margin-left: auto; 
     margin-right: auto; 
-    width:700px;
-    height:75vh;
+    max-width:700px;
     background-color:$clr-background-600;
     border-radius:.5rem;
     padding:2rem;
-    h2 {
-        text-transform:uppercase;
-        font-weight:700;
-        font-size:2rem;
+    div:has(h2) {
+        display:flex;
+        gap:1rem;
         border-bottom:1px solid $clr-body-500;
-        margin-bottom:2rem;
+        align-items:center;
+        transition:
+            border-width .1s;
+        h2 {
+            text-transform:uppercase;
+            font-weight:700;
+            font-size:2rem;
+        }
+        &:has([contenteditable="true"]) {
+            border-color:$clr-accent;
+            border-width:3px;
+            h2 {    
+                border:none;
+                outline:none;
+                &::selection {
+                    background-color:$clr-accent;
+                    color:$clr-background-800;
+                }
+            }
+        }
     }
     .options {
-        flex-grow: 1;
         display:grid;
-        gap: 1rem;
+        gap: 1.5rem;
         grid-template-columns: auto 1fr;
-        grid-template-rows:2rem;
+        border-left:1px solid $clr-body-500;
+        border-right:1px solid $clr-body-500;
+        padding:2rem 1rem;
     }
     .die-selector {
         position:static;
@@ -313,12 +339,12 @@ i.button {
     input {
         background:$clr-background-800;
         border:none;
-        outline-color:red;
         outline:none;
     }
     &-footer {
+        flex-grow:1;
+        align-items:end;
         border-top:1px solid $clr-body-500;
-        margin-top:2rem;
         padding-top:.5rem;
         display:flex;
         justify-content: space-between;
@@ -331,6 +357,19 @@ i.button {
         gap:.5rem;
         line-height:1;
         cursor:pointer;
+    }
+    div:has(> label > [type="radio"]) {
+        display:flex;
+        justify-content:space-between;
+        gap:2rem;
+        label {
+            display:flex;
+            gap:1rem;
+            padding:.5rem 1rem;
+            &:hover {
+                background-color:$clr-background-400;
+            }
+        }
     }
     .delete-button {
         background-color:$clr-accent;

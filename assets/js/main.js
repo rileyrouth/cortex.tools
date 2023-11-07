@@ -29,6 +29,26 @@ const character = {
     "traitSets": []
 }
 
+loadSamples();
+
+async function loadSamples() {
+    let samples = ["attributes"];
+    starterBox.remove();
+
+    for (let sample of samples) {
+        const myRequest = new Request(`assets/js/bin/${sample}.json`);
+        fetch(myRequest).then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((response) => {
+            main.appendChild(createNewTraitSet(response));
+        });
+    }
+}
+
 addTraitSet.addEventListener("click", function(event) {
     nav.appendChild(traitSetMenu);
 })
@@ -97,10 +117,6 @@ function createNewTraitSet(traitSet) {
     }
     traitArticle.appendChild(traitsList);
 
-    if (traitSet.traits.length > 6) {
-        traitArticle.classList.add("grid");
-    }
-
     const newTraitButton = document.createElement("button");
     newTraitButton.className = "new-trait-button";
     newTraitButton.innerHTML = `<i class="fa-solid fa-square-plus"></i>`;
@@ -150,7 +166,7 @@ function generateTrait(trait) {
     listItem.appendChild(traitName);
 
     const traitRating = document.createElement("i");
-    traitRating.classList.add("cortex", "d" + trait.rating);
+    traitRating.classList.add("cortex");
     traitRating.innerHTML = symbolCodes["d" + trait.rating];
     
     traitRating.addEventListener("mouseenter",  traitRating.mouseenterfn = function mouseenterfn(e) {
@@ -194,7 +210,6 @@ function editTraitSet(traitArticle) {
         let trait = traitList[i];
         trait.contentEditable = !trait.isContentEditable;
     }
-    checkTraitArticleLayout(traitArticle);
 }
 
 function generateDieSelector(trait) {
@@ -216,16 +231,6 @@ function generateDieSelector(trait) {
     return dieSelector;
 }
 
-function checkTraitArticleLayout(traitArticle) {
-    let traitList = traitArticle.querySelectorAll("p");
-    if (traitList.length > 6) {
-        traitArticle.classList.add("grid");
-    }
-    else {
-        traitArticle.classList.remove("grid");        
-    }
-}
-
 function openTraitOptions(traitArticle) {
     const traitSetName = traitArticle.querySelector("h2").innerHTML;
     const traitSet = character.traitSets.find((t) => t.name === traitSetName);
@@ -233,8 +238,54 @@ function openTraitOptions(traitArticle) {
     const optionsPanel = document.createElement("div");
     optionsPanel.className = "options-panel";
 
-    const optionsHeader = document.createElement("h2");
-    optionsHeader.innerHTML = traitSetName;
+    const optionsHeader = document.createElement("div");
+    const myH2 = document.createElement("h2");
+    myH2.id = "editableTraitHeader";
+    myH2.innerHTML = traitSetName;
+    myH2.setAttribute("contenteditable", "false");
+    optionsHeader.appendChild(myH2);
+
+    const editButton = document.createElement("i");
+    editButton.classList.add("fa-solid", "fa-pen-to-square", "button")
+    editButton.addEventListener("click", function(e) {
+        myH2.contentEditable = !myH2.isContentEditable;
+        myH2.focus();
+        var range = document.createRange();
+        range.selectNodeContents(myH2);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        myH2.addEventListener("keypress", myH2.keypressfn = function keypressfn(e) {
+            if (e.target.getAttribute("contenteditable") === "true" && e.key === "Enter") {          
+                e.preventDefault();
+                myH2.blur();
+            }
+        });
+        myH2.addEventListener("blur", function(e) {
+            sel.removeAllRanges();
+            myH2.contentEditable = "false";
+
+            let str = myH2.innerText.toLowerCase();
+            const arr = str.split(' ');
+            for (i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+            }
+            str = arr.join(' ');
+
+            traitSet.name = str;
+            traitArticle.querySelector("h2").innerHTML = str;
+        });
+        document.addEventListener("click", function(e) {
+            let activeEditableHeader = document.querySelector(`div:has(> #editableTraitHeader[contenteditable="true"])`);
+            if (activeEditableHeader && !activeEditableHeader.contains(e.target)) {
+                let activeH2 = activeEditableHeader.querySelector("h2");
+                activeH2.blur();
+            }
+            document.removeEventListener("click", this);
+        })
+    });    
+    optionsHeader.appendChild(editButton);
+
     optionsPanel.appendChild(optionsHeader);
 
     const optionsInnerPanel = document.createElement("div");
@@ -243,47 +294,66 @@ function openTraitOptions(traitArticle) {
     for (let optionProp in traitSetOptions) {
         let optionValue = traitSetOptions[optionProp];
         const optionName = document.createElement("p");
+        const optionSelector = document.createElement("div");
 
         switch (optionProp) {
             case 'prime':
-                optionName.innerHTML = "Prime Set"
+                optionName.innerHTML = "Prime Set";
+                optionSelector.appendChild(createCheckbox());
                 break;
             case "defaultRating":
-                optionName.innerHTML = "Default Die Rating"
+                optionName.innerHTML = "Default Die Rating";
+                optionSelector.classList.add("die-selector");
+                const currentValue = optionValue;
+                for (i = 4; i < 13; i+= 2) {
+                    const die = document.createElement("i");
+                    const pureValue = i;
+                    const dieValue = "d" + pureValue;
+                    die.classList.add("cortex");
+                    if (pureValue === currentValue) {
+                        die.classList.add("current");
+                    }
+                    die.innerHTML = symbolCodes[dieValue];
+
+                    die.addEventListener("click", function(e) {
+                        const selector = e.target.closest(".die-selector");
+                        for (i = 0; i < 5; i++) {
+                            selector.childNodes[i].className = "cortex";
+                        }
+                        e.target.classList.add("current");
+                        traitSetOptions[optionProp] = pureValue;
+                    });
+
+                    optionSelector.appendChild(die);
+                }
+                break;
+            case "display":
+                optionName.innerHTML = "Display";
+                const radioList = document.createElement("div");
+                const radioLabels = ["static", "stepped", "scale"];
+                for (i = 0; i < 3; i++) {
+                    let label = document.createElement("label");
+                    label.innerHTML = radioLabels[i].charAt(0).toUpperCase() + radioLabels[i].slice(1);
+
+                    let radio = document.createElement("input");
+                    radio.setAttribute("type", "radio");
+                    radio.setAttribute("name", "display-type");
+                    if (optionValue == radioLabels[i]) {
+                        radio.setAttribute("checked", "");
+                    }
+                    label.addEventListener("click", function(e) {
+                        changeDisplay(traitArticle, label.innerText);
+                    });
+                    label.appendChild(radio);
+                    radioList.appendChild(label);   
+                }
+                optionSelector.appendChild(radioList);
                 break;
             default:
                 console.log(`Option ${optionProp} not recognised`);
         }
-        optionsInnerPanel.appendChild(optionName);
-
-        const optionSelector = document.createElement("div");
-
-        if (Number.parseInt(optionValue)) {
-            optionSelector.classList.add("die-selector");
-            const currentValue = optionValue;
-            for (i = 4; i < 13; i+= 2) {
-                const die = document.createElement("i");
-                const pureValue = i;
-                const dieValue = "d" + pureValue;
-                die.classList.add("cortex");
-                if (pureValue === currentValue) {
-                    die.classList.add("current");
-                }
-                die.innerHTML = symbolCodes[dieValue];
-
-                die.addEventListener("click", function(e) {
-                    const selector = e.target.closest(".die-selector");
-                    for (i = 0; i < 5; i++) {
-                        selector.childNodes[i].className = "cortex";
-                    }
-                    e.target.classList.add("current");
-                    traitSetOptions[optionProp] = pureValue;
-                });
-
-                optionSelector.appendChild(die);
-            }
-        }
-        else if (typeof optionValue === "boolean") {
+        
+        function createCheckbox() {
             const checkBox = document.createElement("input");
             checkBox.setAttribute("type", "checkbox");
             if (optionValue) {
@@ -292,12 +362,10 @@ function openTraitOptions(traitArticle) {
             checkBox.addEventListener("click", function(e) {
                 traitSetOptions[optionProp] = !optionValue;
             })
-            optionSelector.appendChild(checkBox);
-        }
-        else {
-            console.log("optionValue");
+            return checkBox;
         }
         
+        optionsInnerPanel.appendChild(optionName);
         optionsInnerPanel.appendChild(optionSelector);
     }
 
@@ -348,4 +416,67 @@ document.addEventListener("click", function(e) {
 function closeTraitOptions(optionsPanel) {
     optionsPanel.previousElementSibling.remove();
     optionsPanel.remove();
+}
+
+function changeDisplay(traitArticle, displayType) {
+    const traitList = traitArticle.querySelectorAll("li");
+    const oldDice = traitArticle.querySelectorAll("li i");
+    for (i = 0; i < traitList.length; i++) {
+        
+        let value = oldDice[i].innerHTML;
+        switch (value) {
+            case "\u{2463}":
+                value = 4;
+                break;
+            case "\u{2465}":
+                value = 6;
+                break;
+            case "\u{2467}":
+                value = 8;
+                break;
+            case "\u{2469}":
+                value = 10;
+                break;
+            case "\u{246B}":
+                value = 12;
+                break;
+            default:
+                console.log(`Die value ${value} not recognised`);
+        }
+        oldDice[i].remove();
+        switch (displayType) {
+            case "Static":
+                let singleDie = document.createElement("i");
+                singleDie.className = "cortex";
+                singleDie.innerHTML = symbolCodes["d" + value];
+                traitArticle.querySelectorAll("li")[i].appendChild(singleDie)
+                break;
+            case "Stepped":
+                let eachDie = document.createElement("i");
+                eachDie.className = "cortex";
+                eachDie.innerHTML = symbolCodes["d" + value];
+                traitArticle.querySelectorAll("li")[i].appendChild(eachDie)
+                break;
+            case "Scale":
+            const dieScale = document.createElement("span");
+            dieScale.classList.add("die-scale");
+        
+            for (d = 4; d < 13; d+= 2) {
+                const die = document.createElement("i");
+                const pureValue = d;
+                const dieValue = "d" + pureValue;
+                die.classList.add("cortex");
+                die.innerHTML = symbolCodes[dieValue];
+                die.addEventListener("click", function(e) {
+                    trait.rating = pureValue;
+                    this.parentElement.closest("i").innerHTML = die.innerHTML;
+                });
+                dieScale.appendChild(die);
+            }
+            traitList[i].appendChild(dieScale);
+                break;
+            default:
+                console.log("Display type not recognised");
+        }
+    }
 }
