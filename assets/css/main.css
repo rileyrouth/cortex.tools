@@ -237,9 +237,6 @@ main {
 .trait-set:has([contenteditable=true]) .trait-set-header .fa-gears {
   display: block;
 }
-.trait-set:has([contenteditable=true]) .traits {
-  background-color: hsl(0, 0%, 10%);
-}
 .trait-set:has([contenteditable=true]) .traits li {
   position: relative;
 }
@@ -271,14 +268,6 @@ main {
   font-family: "Cortex";
   font-size: 2rem;
   color: hsl(0, 90%, 60%);
-}
-
-.tmp-element {
-  border: 0;
-  padding-left: 2em;
-  white-space: pre;
-  font-variant-caps: small-caps;
-  font-size: 19.2px;
 }
 
 .die-selector {
@@ -445,10 +434,7 @@ main {
 .darkened-background {
   content: "";
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   background-color: hsl(0, 0%, 10%);
   opacity: 0.9;
 }

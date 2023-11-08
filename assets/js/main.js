@@ -29,7 +29,7 @@ const character = {
     "traitSets": []
 }
 
-loadSamples();
+// loadSamples();
 
 async function loadSamples() {
     let samples = ["complications"];

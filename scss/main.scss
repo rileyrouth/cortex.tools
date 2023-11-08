@@ -175,7 +175,6 @@ main {
         }
     }
     .traits {
-        background-color:$clr-background-800;
         li {
             position:relative;
         }
@@ -209,14 +208,6 @@ main {
     font-family:"Cortex";
     font-size:2rem;
     color:$clr-accent;
-}
-
-.tmp-element {
-    border:0;
-    padding-left:2em;
-    white-space: pre;
-    font-variant-caps:small-caps;
-    font-size:19.2px;
 }
 
 .die-selector {
@@ -276,8 +267,6 @@ main {
         }
     }
 }
-
-
 
 .options-panel {
     position:absolute;
@@ -385,10 +374,7 @@ main {
 .darkened-background {
     content:'';
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset:0;
     background-color:$clr-background-800;
     opacity:.9;
 }
