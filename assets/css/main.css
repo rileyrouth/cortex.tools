@@ -84,12 +84,8 @@ nav {
   padding: 1rem 2rem;
   position: relative;
 }
-nav i {
+nav .button {
   font-size: 2rem;
-}
-
-.sidebar {
-  background-color: hsl(0, 0%, 30%);
 }
 
 main {
@@ -98,32 +94,30 @@ main {
   flex-wrap: wrap;
   gap: 3rem;
 }
-main .starter {
+
+.starter {
   border: 0.25rem dashed hsl(0, 0%, 20%);
   border-radius: 2rem;
   padding: 4rem 5rem;
   margin: auto;
-  cursor: default;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
   text-align: center;
 }
-main .starter h2 {
+.starter h2 {
   font-size: 1.75rem;
   font-weight: 700;
 }
-main .starter i {
+.starter i {
   font-size: 2rem;
   position: relative;
   top: 0.3rem;
   margin-inline: 0.3rem;
 }
 
-i.button {
+.button:hover {
   cursor: pointer;
-}
-i.button:hover {
   color: hsl(0, 90%, 60%);
 }
 
@@ -140,8 +134,7 @@ i.button:hover {
   gap: 1rem;
   justify-content: space-between;
   border-bottom: 1px solid hsl(0, 0%, 10%);
-  margin-bottom: 1rem;
-  line-height: 1.1;
+  line-height: 1;
 }
 .trait-set-header h2 {
   text-transform: uppercase;
@@ -151,32 +144,26 @@ i.button:hover {
 .trait-set-header .button-container {
   display: flex;
   gap: 0.5rem;
+  font-size: 1rem;
 }
 .trait-set-header .button-container .fa-gears {
   display: none;
-}
-.trait-set-header .button-container i {
-  font-size: 1rem;
-}
-.trait-set .traits {
-  font-size: 1.2rem;
 }
 .trait-set .traits li {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   align-items: center;
-  font-variant-caps: small-caps;
 }
 .trait-set .traits li .close-button {
   display: none;
 }
 .trait-set .traits li p {
   flex-grow: 1;
+  font-size: 1.2rem;
+  font-variant-caps: small-caps;
   border-bottom: 1px solid hsl(0, 0%, 20%);
-  margin-bottom: -1px;
-  color: hsl(0, 0%, 80%);
-  transition: border-width 0.1s;
+  transition: border-width 100ms;
 }
 .trait-set .traits li p:focus-visible, .trait-set .traits li:has(.close-button:hover) p {
   outline: none;
@@ -184,20 +171,46 @@ i.button:hover {
   border-width: 3px;
 }
 .trait-set .traits li i {
-  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
-.trait-set .traits li .die-scale {
+.trait-set .traits li .die-step, .trait-set .traits li .die-scale {
   display: flex;
+  justify-content: space-around;
+  align-items: center;
   gap: 0.25rem;
+}
+.trait-set .traits li .die-step i, .trait-set .traits li .die-scale i {
+  display: flex;
+  justify-content: center;
+  transition: opacity 100ms linear;
+  opacity: 0.25;
+  min-width: 1.5rem;
+}
+.trait-set .traits li .die-step i.current, .trait-set .traits li .die-step i:hover, .trait-set .traits li .die-scale i.current, .trait-set .traits li .die-scale i:hover {
+  opacity: 1;
   cursor: pointer;
 }
-.trait-set .traits li .die-scale .current {
+.trait-set .traits li .die-step i:not(.current) {
+  font-size: 1.2rem;
+}
+.trait-set .new-trait-button {
+  display: none;
+  width: 100%;
+  background-color: hsl(0, 0%, 10%);
   color: hsl(0, 0%, 80%);
+  text-align: center;
+  border: none;
+}
+.trait-set .new-trait-button i {
+  font-size: 1rem;
+}
+.trait-set .new-trait-button:hover {
+  background-color: hsl(0, 0%, 20%);
+  cursor: pointer;
 }
 
-.trait-set:has(:nth-child(7)) {
-  width: 25rem;
-}
 .trait-set:has(:nth-child(7)) .traits {
   display: grid;
   grid-template-columns: auto auto;
@@ -319,19 +332,6 @@ i.button:hover {
 }
 #traitSetMenu li:hover {
   background-color: hsl(0, 0%, 30%);
-  cursor: pointer;
-}
-
-.new-trait-button {
-  display: none;
-  width: 100%;
-  background-color: hsl(0, 0%, 10%);
-  color: hsl(0, 0%, 80%);
-  text-align: center;
-  border: none;
-}
-.new-trait-button:hover {
-  background-color: hsl(0, 0%, 20%);
   cursor: pointer;
 }
 

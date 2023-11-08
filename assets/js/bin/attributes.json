@@ -1,7 +1,7 @@
 {
     "name": "Attributes",
     "options": {
-        "prime": false,
+        "prime": true,
         "defaultRating": 8,
         "display": "static"
     },

@@ -23,13 +23,9 @@ nav {
     align-items:center;
     padding:1rem 2rem;
     position:relative;
-    i {
+    .button {
         font-size:2rem;
     }
-}
-
-.sidebar {
-    background-color: $clr-background-400;
 }
 
 main {
@@ -37,32 +33,30 @@ main {
     display:flex;
     flex-wrap:wrap;
     gap:3rem;
-    .starter {
-        border:.25rem dashed $clr-background-600;
-        border-radius:2rem;
-        padding:4rem 5rem;
-        margin:auto;
-        cursor:default;
-        user-select: none;
-        text-align:center;
-        h2 {
-            font-size:1.75rem;
-            font-weight:700;
-        }
-        i {
-            font-size:2rem;
-            position:relative;
-            top:.3rem;
-            margin-inline:.3rem;
-        }
+}
+
+.starter {
+    border:.25rem dashed $clr-background-600;
+    border-radius:2rem;
+    padding:4rem 5rem;
+    margin:auto;
+    user-select: none;
+    text-align:center;
+    h2 {
+        font-size:1.75rem;
+        font-weight:700;
+    }
+    i {
+        font-size:2rem;
+        position:relative;
+        top:.3rem;
+        margin-inline:.3rem;
     }
 }
 
-i.button {
+.button:hover {
     cursor:pointer;
-    &:hover {
-        color:$clr-accent;
-    }
+    color:$clr-accent;
 }
 
 .trait-set {
@@ -76,8 +70,7 @@ i.button {
         gap:1rem;
         justify-content: space-between;
         border-bottom:1px solid $clr-background-800;
-        margin-bottom:1rem;
-        line-height:1.1;
+        line-height:1;
         h2 {
             text-transform:uppercase;
             font-weight:700;
@@ -86,57 +79,76 @@ i.button {
         .button-container {
             display:flex;
             gap:.5rem;
+            font-size:1rem;    
             .fa-gears {
                 display:none;
             }
-            i {
-                font-size:1rem;            
-            }
         }
     }
-    .traits {
-        font-size:1.2rem;
-        li {
-            display:flex;
-            justify-content: space-between;
-            gap:1rem;
-            align-items:center;
+    .traits li {
+        display:flex;
+        justify-content: space-between;
+        gap:1rem;
+        align-items:center;
+        .close-button {
+            display:none;
+        }
+        p {
+            flex-grow:1;
+            font-size:1.2rem;
             font-variant-caps:small-caps;
-            .close-button {
-                display:none;
-            }
-            p {
-                flex-grow:1;
-                border-bottom:1px solid $clr-background-600;
-                margin-bottom: -1px;
-                color:$clr-body-500;
-                transition:
-                    border-width .1s;
-            
-            }
-            p:focus-visible,
-            &:has(.close-button:hover) p {
-                outline:none;
-                border-color:$clr-accent;
-                border-width:3px;
-            }
+            border-bottom:1px solid $clr-background-600;
+            transition: border-width 100ms;        
+        }
+        p:focus-visible,
+        &:has(.close-button:hover) p {
+            outline:none;
+            border-color:$clr-accent;
+            border-width:3px;
+        }
+        i {
+            user-select: none;
+        }
+        .die-step, .die-scale {
+            display:flex;
+            justify-content: space-around;
+            align-items:center;
+            gap: .25rem;
             i {
-                cursor:default;
-            }
-            .die-scale {
                 display:flex;
-                gap:.25rem;
-                cursor:pointer;
-                .current {
-                    color:$clr-body-500;
+                justify-content: center;
+                transition: opacity 100ms linear;
+                opacity:.25;
+                min-width:1.5rem;
+                &.current,
+                &:hover {
+                    opacity:1;
+                    cursor:pointer;
                 }
             }
+        }
+        .die-step i:not(.current) {
+            font-size:1.2rem;
+        }
+    }
+    .new-trait-button {
+        display:none;
+        width:100%;
+        background-color:$clr-background-800;
+        color:$clr-body-500;
+        text-align:center;
+        border:none;
+        i {
+            font-size:1rem;
+        }
+        &:hover {
+            background-color:$clr-background-600;
+            cursor:pointer;
         }
     }
 }
 
 .trait-set:has(:nth-child(7)) {
-    width:25rem;
     .traits {
         display:grid;
         grid-template-columns: auto auto;
@@ -265,18 +277,7 @@ i.button {
     }
 }
 
-.new-trait-button {
-    display:none;
-    width:100%;
-    background-color:$clr-background-800;
-    color:$clr-body-500;
-    text-align:center;
-    border:none;
-    &:hover {
-        background-color:$clr-background-600;
-        cursor:pointer;
-    }
-}
+
 
 .options-panel {
     position:absolute;

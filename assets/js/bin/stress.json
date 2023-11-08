@@ -1,0 +1,28 @@
+{
+    "name": "Stress",
+    "options": {
+        "prime": false,
+        "defaultRating": 4,
+        "display": "scale"
+    },
+    "traits": [{
+        "name": "Angry",
+        "rating": 4
+    },
+    {
+        "name": "Lost",
+        "rating": 4
+    },
+    {
+        "name": "Beaten",
+        "rating": 4
+    },
+    {
+        "name": "Embarassed",
+        "rating": 4
+    },
+    {
+        "name": "Exhausted",
+        "rating": 4
+    }]
+}

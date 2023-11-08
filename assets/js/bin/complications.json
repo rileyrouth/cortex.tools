@@ -1,0 +1,12 @@
+{
+    "name": "Complications",
+    "options": {
+        "prime": false,
+        "defaultRating": 6,
+        "display": "stepped"
+    },
+    "traits": [{
+        "name": "Bleeding",
+        "rating": 6
+    }]
+}

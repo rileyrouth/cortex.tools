@@ -13,7 +13,7 @@ const symbolCodes = {
     mod: '\u{2463}'
 }
 
-let traitSetList = ["Attributes", "Skills", "Distinctions"];
+let traitSetList = ["Attributes", "Skills", "Distinctions", "Stress", "Complications"];
 const traitSetMenu = document.createElement("ul");
 traitSetMenu.id = "traitSetMenu";
 traitSetMenu.setAttribute("role", "list");
@@ -32,7 +32,7 @@ const character = {
 loadSamples();
 
 async function loadSamples() {
-    let samples = ["attributes"];
+    let samples = ["complications"];
     starterBox.remove();
 
     for (let sample of samples) {
@@ -113,7 +113,7 @@ function createNewTraitSet(traitSet) {
     traitsList.setAttribute("role", "list");
     traitsList.classList.add("traits");
     for (i = 0; i < traitSet.traits.length; i++) {
-        traitsList.appendChild(generateTrait(traitSet.traits[i]));
+        traitsList.appendChild(generateTrait(traitSet.traits[i], traitSet.options.display));
     }
     traitArticle.appendChild(traitsList);
 
@@ -127,7 +127,7 @@ function createNewTraitSet(traitSet) {
             rating: traitSet.options.defaultRating
         }
         traitSet.traits.push(newTrait)        
-        const newTraitItem = generateTrait(newTrait);
+        const newTraitItem = generateTrait(newTrait, traitSet.options.display);
         
         newTraitItem.querySelector("p").setAttribute("contenteditable", "true");
 
@@ -137,9 +137,8 @@ function createNewTraitSet(traitSet) {
     return traitArticle;
 }
 
-function generateTrait(trait) {
-    const listItem = document.createElement("li");
-        
+function generateTrait(trait, displayType) {
+    const listItem = document.createElement("li");        
     const traitName = document.createElement("p")
     traitName.innerHTML = trait.name;
     traitName.setAttribute("contenteditable", "false");
@@ -165,24 +164,7 @@ function generateTrait(trait) {
 
     listItem.appendChild(traitName);
 
-    const traitRating = document.createElement("i");
-    traitRating.classList.add("cortex");
-    traitRating.innerHTML = symbolCodes["d" + trait.rating];
-    
-    traitRating.addEventListener("mouseenter",  traitRating.mouseenterfn = function mouseenterfn(e) {
-        if (e.target.previousElementSibling.getAttribute("contenteditable") === "true") {
-            traitRating.selector = generateDieSelector(trait);
-        traitRating.appendChild(traitRating.selector);
-        }
-        
-    });
-
-    traitRating.addEventListener("mouseleave", traitRating.mouseleavefn = function mouseleavefn(e) {
-        if (e.target.previousElementSibling.getAttribute("contenteditable") === "true") {
-            traitRating.selector.remove();
-        }
-    })
-    listItem.appendChild(traitRating);
+    listItem.appendChild(generateDieRatingDisplay(trait, displayType));
 
     const closeButton = document.createElement("a");
     closeButton.className = "close-button";
@@ -341,8 +323,9 @@ function openTraitOptions(traitArticle) {
                     if (optionValue == radioLabels[i]) {
                         radio.setAttribute("checked", "");
                     }
-                    label.addEventListener("click", function(e) {
-                        changeDisplay(traitArticle, label.innerText);
+                    label.addEventListener("input", function(e) {
+                        traitSetOptions[optionProp] = label.innerText.toLowerCase();
+                        changeDisplay(traitArticle, label.innerText.toLowerCase());
                     });
                     label.appendChild(radio);
                     radioList.appendChild(label);   
@@ -403,15 +386,13 @@ function openTraitOptions(traitArticle) {
 
     const darkenedBackground = document.createElement("div");
     darkenedBackground.className = "darkened-background";
+    darkenedBackground.addEventListener("click", function(e) {
+        closeTraitOptions(e.target.nextElementSibling);
+    });
     main.append(darkenedBackground);
+
     main.append(optionsPanel);
 }
-
-document.addEventListener("click", function(e) {
-    if (e.target.className === "darkened-background") {
-        closeTraitOptions(e.target.nextElementSibling);
-    }
-});
 
 function closeTraitOptions(optionsPanel) {
     optionsPanel.previousElementSibling.remove();
@@ -419,64 +400,134 @@ function closeTraitOptions(optionsPanel) {
 }
 
 function changeDisplay(traitArticle, displayType) {
+    const traitSet = character.traitSets.find((t) => t.name === traitArticle.querySelector("h2").innerHTML);
     const traitList = traitArticle.querySelectorAll("li");
-    const oldDice = traitArticle.querySelectorAll("li i");
     for (i = 0; i < traitList.length; i++) {
-        
-        let value = oldDice[i].innerHTML;
-        switch (value) {
-            case "\u{2463}":
-                value = 4;
-                break;
-            case "\u{2465}":
-                value = 6;
-                break;
-            case "\u{2467}":
-                value = 8;
-                break;
-            case "\u{2469}":
-                value = 10;
-                break;
-            case "\u{246B}":
-                value = 12;
-                break;
-            default:
-                console.log(`Die value ${value} not recognised`);
-        }
-        oldDice[i].remove();
-        switch (displayType) {
-            case "Static":
-                let singleDie = document.createElement("i");
-                singleDie.className = "cortex";
-                singleDie.innerHTML = symbolCodes["d" + value];
-                traitArticle.querySelectorAll("li")[i].appendChild(singleDie)
-                break;
-            case "Stepped":
-                let eachDie = document.createElement("i");
-                eachDie.className = "cortex";
-                eachDie.innerHTML = symbolCodes["d" + value];
-                traitArticle.querySelectorAll("li")[i].appendChild(eachDie)
-                break;
-            case "Scale":
-            const dieScale = document.createElement("span");
-            dieScale.classList.add("die-scale");
+        let oldDice = traitList[i].querySelector(".cortex");
+        oldDice.replaceWith(generateDieRatingDisplay(traitSet.traits[i], displayType));
+    }
+}
+
+function getRatingFromSymbol(value) {
+    switch (value) {
+        case "\u{2463}":
+            return 4;
+            break;
+        case "\u{2465}":
+            return 6;
+            break;
+        case "\u{2467}":
+            return 8;
+            break;
+        case "\u{2469}":
+            return 10;
+            break;
+        case "\u{246B}":
+            return 12;
+            break;
+        default:
+            console.log(`Die value ${value} not recognised`);
+    }
+}
+
+function generateDieRatingDisplay(trait, displayType) {
+    switch (displayType) {
+        case "static":
+            const staticRating = document.createElement("i");
+            staticRating.classList.add("cortex");
+            staticRating.innerHTML = symbolCodes["d" + trait.rating];
+            staticRating.addEventListener("mouseenter",  staticRating.mouseenterfn = function mouseenterfn(e) {
+                if (e.target.previousElementSibling.getAttribute("contenteditable") === "true") {
+                    staticRating.selector = generateDieSelector(trait);
+                staticRating.appendChild(staticRating.selector);
+                }                
+            });
+
+            staticRating.addEventListener("mouseleave", staticRating.mouseleavefn = function mouseleavefn(e) {
+                if (e.target.previousElementSibling.getAttribute("contenteditable") === "true") {
+                    staticRating.selector.remove();
+                }
+            })
+            return staticRating;
+        case "stepped":
+            const steppedRating = document.createElement("span");
+            steppedRating.classList.add("cortex", "die-step");
+
+            const stepDown = document.createElement("i");
+            if (symbolCodes["d" + (trait.rating - 2)]) {
+                stepDown.innerHTML = symbolCodes["d" + (trait.rating - 2)]
+            }
+            stepDown.addEventListener("click", function(e) {
+                updateStep(e, "down");
+            });
+            steppedRating.appendChild(stepDown);
+
+            const base = document.createElement("i");
+            base.className = "current";
+            base.innerHTML = symbolCodes["d" + trait.rating];
+            steppedRating.appendChild(base);
+
+            const stepUp = document.createElement("i");
+            if (symbolCodes["d" + (trait.rating + 2)]) {
+                stepUp.innerHTML = symbolCodes["d" + (trait.rating + 2)];
+            }
+            stepUp.addEventListener("click", function(e) {
+                updateStep(e, "up");
+            });
+            steppedRating.appendChild(stepUp);
+
+            return steppedRating;
+
+            function updateStep(e, direction) {
+                let stepper = e.target.parentElement.children;
+                let lowerDie = stepper[0];
+                let currentDie = stepper[1];
+                let higherDie = stepper[2];
+                switch (direction) {
+                    case "up":
+                        lowerDie.innerHTML = currentDie.innerHTML;
+                        currentDie.innerHTML = higherDie.innerHTML;
+                        higherDie.innerHTML = symbolCodes["d" + (getRatingFromSymbol(higherDie.innerHTML) + 2)];
+                        if (higherDie.innerHTML == "undefined") {
+                            higherDie.innerHTML = "";
+                        }
+                        break;
+                    case "down":
+                        higherDie.innerHTML = currentDie.innerHTML;
+                        currentDie.innerHTML = lowerDie.innerHTML;
+                        lowerDie.innerHTML = symbolCodes["d" + (getRatingFromSymbol(lowerDie.innerHTML) - 2)];
+                        if (lowerDie.innerHTML == "undefined") {
+                            lowerDie.innerHTML = "";
+                        }
+                        break;
+                    default:
+                        throw new Error();
+                }
+                trait.rating = getRatingFromSymbol(currentDie.innerHTML);
+            }
+        case "scale":
+            const scaleRating = document.createElement("span");
+            scaleRating.classList.add("cortex", "die-scale");
         
             for (d = 4; d < 13; d+= 2) {
                 const die = document.createElement("i");
-                const pureValue = d;
-                const dieValue = "d" + pureValue;
-                die.classList.add("cortex");
+                if (d == trait.rating) {
+                    die.className = "current";
+                }
+                const dieValue = "d" + d;
                 die.innerHTML = symbolCodes[dieValue];
                 die.addEventListener("click", function(e) {
-                    trait.rating = pureValue;
-                    this.parentElement.closest("i").innerHTML = die.innerHTML;
+                    const scale = e.target.parentElement.children;
+                    for (i = 0; i < scale.length; i++) {
+                        scale[i].className = "";
+                    }
+                    e.target.className = "current";
+                    trait.rating = getRatingFromSymbol(e.target.innerHTML);
                 });
-                dieScale.appendChild(die);
+                scaleRating.appendChild(die);
             }
-            traitList[i].appendChild(dieScale);
-                break;
-            default:
-                console.log("Display type not recognised");
-        }
+            return scaleRating;
+        default:
+            throw new Error(`Display Type ${displayType} unrecognised.`);
     }
 }
