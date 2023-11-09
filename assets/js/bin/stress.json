@@ -3,7 +3,8 @@
     "options": {
         "prime": false,
         "defaultRating": 4,
-        "display": "scale"
+        "display": "scale",
+        "temporary": false
     },
     "traits": [{
         "name": "Angry",

@@ -90,6 +90,7 @@ main {
         justify-content: space-between;
         gap:1rem;
         align-items:center;
+        position:relative;
         .close-button {
             display:none;
         }
@@ -130,6 +131,20 @@ main {
         .die-step i:not(.current) {
             font-size:1.2rem;
         }
+        .close-button {            
+            position:absolute;
+            left:-2rem;
+            font-size:.9rem;
+            background-color:$clr-background-600;
+            color:$clr-background-800;
+            padding-inline:.25rem;
+            border-top-left-radius:50%;
+            border-bottom-left-radius:50%;
+            &:hover {
+                cursor:pointer;
+                color:$clr-accent;
+            }
+        }
     }
     .new-trait-button {
         display:none;
@@ -164,7 +179,7 @@ main {
     }
 }
 
-.trait-set:has([contenteditable="true"]) {
+.trait-set:has([contenteditable="true"]):not(:has(.temporarily-editable)) {
     background-color:$clr-background-800;
     border:2px solid $clr-background-600;
     padding:calc(1rem - 2px);
@@ -179,20 +194,7 @@ main {
             position:relative;
         }
         .close-button {
-            content:'X';
             display:block;
-            position:absolute;
-            left:-2rem;
-            font-size:.9rem;
-            background-color:$clr-background-600;
-            color:$clr-background-800;
-            padding-inline:.25rem;
-            border-top-left-radius:50%;
-            border-bottom-left-radius:50%;
-            &:hover {
-                cursor:pointer;
-                color:$clr-accent;
-            }
         }
         i {
             position: relative;
@@ -350,8 +352,7 @@ main {
     }
     div:has(> label > [type="radio"]) {
         display:flex;
-        justify-content:space-between;
-        gap:2rem;
+        flex-direction:column;
         label {
             display:flex;
             gap:1rem;
@@ -377,4 +378,16 @@ main {
     inset:0;
     background-color:$clr-background-800;
     opacity:.9;
+}
+
+article:not(:has([contenteditable="true"])) .new-trait-button.force-visible {
+    display:block;
+    background:none;
+    &:hover {
+        background-color:$clr-background-400;
+    }
+}
+
+article:not(:has([contenteditable="true"])) .close-button.force-visible {
+    display:block;
 }

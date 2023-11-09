@@ -13,7 +13,7 @@ const symbolCodes = {
     mod: '\u{2463}'
 }
 
-let traitSetList = ["Attributes", "Skills", "Distinctions", "Stress", "Complications"];
+let traitSetList = ["Attributes", "Skills", "Distinctions", "Stress", "Complications","Assets","Signature Assets"];
 const traitSetMenu = document.createElement("ul");
 traitSetMenu.id = "traitSetMenu";
 traitSetMenu.setAttribute("role", "list");
@@ -29,10 +29,10 @@ const character = {
     "traitSets": []
 }
 
-// loadSamples();
+loadSamples();
 
 async function loadSamples() {
-    let samples = ["complications"];
+    let samples = ["signature assets"];
     starterBox.remove();
 
     for (let sample of samples) {
@@ -119,6 +119,9 @@ function createNewTraitSet(traitSet) {
 
     const newTraitButton = document.createElement("button");
     newTraitButton.className = "new-trait-button";
+    if (traitSet.options.temporary) {
+        newTraitButton.classList.add("force-visible");
+    }
     newTraitButton.innerHTML = `<i class="fa-solid fa-square-plus"></i>`;
     newTraitButton.addEventListener("click", function(e) {
         const newTraitName = traitSet.name.substring(0, traitSet.name.length -1);
@@ -129,9 +132,20 @@ function createNewTraitSet(traitSet) {
         traitSet.traits.push(newTrait)        
         const newTraitItem = generateTrait(newTrait, traitSet.options.display);
         
-        newTraitItem.querySelector("p").setAttribute("contenteditable", "true");
+        const newTraitParagraph = newTraitItem.querySelector("p");
 
+        if (editButton.classList.contains("fa-pen-to-square")) {
+            newTraitParagraph.classList.add("temporarily-editable");
+        }
+        newTraitParagraph.setAttribute("contenteditable", "true");
+        newTraitParagraph.focus();
         traitsList.appendChild(newTraitItem);
+        
+        var range = document.createRange();
+        range.selectNodeContents(newTraitParagraph);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
     });
     traitArticle.appendChild(newTraitButton);
     return traitArticle;
@@ -153,6 +167,10 @@ function generateTrait(trait, displayType) {
             traitName.innerHTML = traitName.innerHTML.trimEnd()
             trait.name = traitName.innerHTML;
         }
+        if (e.target.classList.contains("temporarily-editable")) {
+            e.target.classList.remove("temporarily-editable");
+            e.target.setAttribute("contenteditable", "false");
+        }
     });
 
     traitName.addEventListener("keypress", traitName.keypressfn = function keypressfn(e) {
@@ -169,15 +187,18 @@ function generateTrait(trait, displayType) {
     const closeButton = document.createElement("a");
     closeButton.className = "close-button";
     closeButton.innerHTML = "X";
+    
+    const traitSet = character.traitSets.find((t) => t.traits.includes(trait));  
 
-    closeButton.addEventListener("click", function(e) {
-        const traitSetName = e.target.closest(".trait-set").querySelector("h2").innerHTML;
-        const traitSet = character.traitSets.find((t) => t.name === traitSetName).traits;
-        
-        traitSet.splice(traitSet.indexOf(trait), 1);
-        listItem.remove();
-        
+    closeButton.addEventListener("click", function(e) {      
+        traitSet.traits.splice(traitSet.traits.indexOf(trait), 1);
+        listItem.remove();        
     });
+
+    if (traitSet.options.temporary == true) {
+        closeButton.classList.add("force-visible");
+    }
+    
     listItem.appendChild(closeButton);
 
     return listItem;
@@ -280,11 +301,11 @@ function openTraitOptions(traitArticle) {
 
         switch (optionProp) {
             case 'prime':
-                optionName.innerHTML = "Prime Set";
-                optionSelector.appendChild(createCheckbox());
+                optionName.innerHTML = "Prime set";
+                optionSelector.appendChild(createcheckbox());
                 break;
             case "defaultRating":
-                optionName.innerHTML = "Default Die Rating";
+                optionName.innerHTML = "Default die rating";
                 optionSelector.classList.add("die-selector");
                 const currentValue = optionValue;
                 for (i = 4; i < 13; i+= 2) {
@@ -310,7 +331,7 @@ function openTraitOptions(traitArticle) {
                 }
                 break;
             case "display":
-                optionName.innerHTML = "Display";
+                optionName.innerHTML = "Display type";
                 const radioList = document.createElement("div");
                 const radioLabels = ["static", "stepped", "scale"];
                 for (i = 0; i < 3; i++) {
@@ -327,25 +348,38 @@ function openTraitOptions(traitArticle) {
                         traitSetOptions[optionProp] = label.innerText.toLowerCase();
                         changeDisplay(traitArticle, label.innerText.toLowerCase());
                     });
-                    label.appendChild(radio);
+                    label.prepend(radio);
                     radioList.appendChild(label);   
                 }
                 optionSelector.appendChild(radioList);
                 break;
+            case "temporary":
+                optionName.innerHTML = "Temporary traits";
+                let temporaryCheckbox = createcheckbox();
+                temporaryCheckbox.addEventListener("input", function(e) {
+                    let newTraitButton = traitArticle.querySelector(".new-trait-button");
+                    newTraitButton.classList.toggle("force-visible");
+                    let closeButtons = traitArticle.querySelectorAll(".close-button");
+                    for (i = 0; i < closeButtons.length; i++) {
+                        closeButtons[i].classList.toggle("force-visible");
+                    }
+                });
+                optionSelector.appendChild(temporaryCheckbox);
+                break;          
             default:
                 console.log(`Option ${optionProp} not recognised`);
         }
         
-        function createCheckbox() {
-            const checkBox = document.createElement("input");
-            checkBox.setAttribute("type", "checkbox");
+        function createcheckbox() {
+            const checkbox = document.createElement("input");
+            checkbox.setAttribute("type", "checkbox");
             if (optionValue) {
-                checkBox.setAttribute("checked", "true");
+                checkbox.setAttribute("checked", "true");
             }
-            checkBox.addEventListener("click", function(e) {
+            checkbox.addEventListener("click", function(e) {
                 traitSetOptions[optionProp] = !optionValue;
             })
-            return checkBox;
+            return checkbox;
         }
         
         optionsInnerPanel.appendChild(optionName);
@@ -388,6 +422,7 @@ function openTraitOptions(traitArticle) {
     darkenedBackground.className = "darkened-background";
     darkenedBackground.addEventListener("click", function(e) {
         closeTraitOptions(e.target.nextElementSibling);
+        console.log(character.traitSets[0].options);
     });
     main.append(darkenedBackground);
 

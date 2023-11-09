@@ -1,0 +1,14 @@
+{
+    "name": "Signature Assets",
+    "options": {
+        "prime": false,
+        "defaultRating": 6,
+        "display": "static",
+        "temporary": false,
+        "descriptors": ["flavour", "sfx", "statement"]
+    },
+    "traits": [{
+        "name": "Magnifying Glass",
+        "rating": 6
+    }]
+}

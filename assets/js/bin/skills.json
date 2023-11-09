@@ -3,7 +3,8 @@
     "options": {
         "prime": true,
         "defaultRating": 4,
-        "display": "static"
+        "display": "static",
+        "temporary": false
     },
     "traits": [{
         "name": "Craft",
